@@ -64,7 +64,8 @@ namespace ContosoUniversity.Controllers
  ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
  }
  return View(student);
-}
+}
+
 
 
         // GET: Students/Edit/5
@@ -112,10 +113,16 @@ namespace ContosoUniversity.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
-            if (student == null)
+         
+            if (saveChangesError.GetValueOrDefaould())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator";
+            }
+           Student student = db.Students.Find(id);
+            if (student ==null)
             {
                 return HttpNotFound();
+
             }
             return View(student);
         }
