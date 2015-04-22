@@ -128,15 +128,22 @@ namespace ContosoUniversity.Controllers
         }
 
         // POST: Students/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int id)
         {
-            Student student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
+            try
+            {
+                Student student = db.Students.Find(id);
+                db.Students.Remove(student);
+                db.SaveChanges();
+            }
+            catch (DataException/*dex*/)
+            {
+                //Log the error(uncomment dex variable name and add a ine here to write a log.
+            }
             return RedirectToAction("Index");
-        }
+            }
 
         protected override void Dispose(bool disposing)
         {
