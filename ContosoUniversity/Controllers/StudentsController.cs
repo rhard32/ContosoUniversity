@@ -24,12 +24,15 @@ namespace ContosoUniversity.Controllers
             switch (sortOrder)
             {
                 case "name_desc":
-                    students = students.OrderBy(s => s.LastName);
+                    students = students.OrderByDescending (s => s.LastName);
                     break;
                 case "Date":
                     students = students.OrderBy(s => s.EnrollmentDate);
                     break;
-                default: students = students.OrderByDescending(s => s.LastName);
+                case "date_desc":
+                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default: students = students.OrderBy(s => s.LastName);
                     break;
                    
             }
