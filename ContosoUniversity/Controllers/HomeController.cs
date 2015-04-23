@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ContosoUniversity.DAL;
+using ContosoUniversity.ViewModels;
 using System.Web.Mvc;
 
 namespace ContosoUniversity.Controllers
