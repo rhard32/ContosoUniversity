@@ -185,7 +185,7 @@ namespace ContosoUniversity.Controllers
                 db.Students.Remove(student);
                 db.SaveChanges();
             }
-            catch (RetryLimitExceededException/*dex*/)
+            catch (RetryLimitExceededException /*dex*/)
             {
                 //Log the error(uncomment dex variable name and add a ine here to write a log.
             }
