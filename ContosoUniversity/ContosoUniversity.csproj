@@ -169,6 +169,10 @@
     <Compile Include="Migrations\201504281527320_InitialCreate.Designer.cs">
       <DependentUpon>201504281527320_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504281853004_MaxLengthOnNames.cs" />
+    <Compile Include="Migrations\201504281853004_MaxLengthOnNames.Designer.cs">
+      <DependentUpon>201504281853004_MaxLengthOnNames.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Enrollment.cs" />
@@ -234,6 +238,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201504281527320_InitialCreate.resx">
       <DependentUpon>201504281527320_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504281853004_MaxLengthOnNames.resx">
+      <DependentUpon>201504281853004_MaxLengthOnNames.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
