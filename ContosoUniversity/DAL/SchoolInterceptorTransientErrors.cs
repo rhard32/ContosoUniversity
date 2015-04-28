@@ -29,8 +29,7 @@ command.Parameters[0].Value.ToString() == "Throw")
  }
  if (throwTransientErrors && _counter < 4)
  {
- _logger.Information("Returning transient error for
-command: {0}", command.CommandText);
+ _logger.Information("Returning transient error forcommand: {0}", command.CommandText);
  _counter++;
  interceptionContext.Exception =
 CreateDummySqlException();
@@ -38,8 +37,7 @@ CreateDummySqlException();
  }
  private SqlException CreateDummySqlException()
  {
- // The instance of SQL Server you attempted to connect to
-does not support encryption
+ // The instance of SQL Server you attempted to connect todoes not support encryption
  var sqlErrorNumber = 20;
  var sqlErrorCtor =
 typeof(SqlError).GetConstructors(BindingFlags.Instance |
@@ -56,7 +54,8 @@ BindingFlags.Instance | BindingFlags.NonPublic);
 typeof(SqlException).GetConstructors(BindingFlags.Instance |
 BindingFlags.NonPublic).Where(c => c.GetParameters().Count() ==
 4).Single();
-     ion)sqlExceptionCtor.Invoke(new object[] { "Dummy",
+     var sqlException =
+     (SqlException)sqlExceptionCtor.Invoke(new object[] { "Dummy",
 errorCollection, null, Guid.NewGuid() });
  return sqlException;
  }
