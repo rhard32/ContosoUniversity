@@ -47,11 +47,13 @@ namespace ContosoUniversity.Controllers
      {
          db.Entry(enrollment).Reference(x => x.Student).Load();
      }
-     viewModel.Enrollments = selectedCourse.Enrollments;
+     viewModel.Enrollments = selectedCourse.Enrollments;
+
 
  }
  return View(viewModel);
-}
+}
+
 
         // GET: Instructors/Details/5
         public ActionResult Details(int? id)
@@ -137,7 +139,7 @@ c.CourseID));
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost (int? id)
+        public ActionResult EditPost(int? id, string[] selectedCourses)
         {
             if (id == null)
  {
@@ -145,6 +147,8 @@ c.CourseID));
  }
  var instructorToUpdate = db.Instructors
  .Include(i => i.OfficeAssignment)
+ .Include(i => i.Courses)
+
  .Where(i => i.ID == id)
  .Single();
  if (TryUpdateModel(instructorToUpdate, "",
@@ -157,6 +161,8 @@ c.CourseID));
  {
  instructorToUpdate.OfficeAssignment = null;
  }
+ UpdateInstructorCourses(selectedCourses, instructorToUpdate);
+
  db.Entry(instructorToUpdate).State = EntityState.Modified;
  db.SaveChanges();
  return RedirectToAction("Index");
@@ -167,8 +173,41 @@ c.CourseID));
  ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
  }
  }
+ PopulateAssignedCourseData(instructorToUpdate);
  return View(instructorToUpdate);
-}
+}
+ return View(instructorToUpdate);
+}
+private void UpdateInstructorCourses(string[] selectedCourses, Instructor
+instructorToUpdate)
+{
+ if (selectedCourses == null)
+ {
+ instructorToUpdate.Courses = new List<Course>();
+ return;
+ }
+ var selectedCoursesHS = new HashSet<string>(selectedCourses);
+ var instructorCourses = new HashSet<int>
+ (instructorToUpdate.Courses.Select(c => c.CourseID));
+ foreach (var course in db.Courses)
+ {
+ if (selectedCoursesHS.Contains(course.CourseID.ToString()))
+ {
+ if (!instructorCourses.Contains(course.CourseID))
+ {
+ instructorToUpdate.Courses.Add(course);
+ }
+ }
+ else
+ {
+ if (instructorCourses.Contains(course.CourseID))
+ {
+ instructorToUpdate.Courses.Remove(course);
+ }
+ }
+ }
+
+
 
         // GET: Instructors/Delete/5
         public ActionResult Delete(int? id)
