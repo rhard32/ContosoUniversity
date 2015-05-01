@@ -69,30 +69,37 @@ namespace ContosoUniversity.Controllers
             return View(instructor);
         }
 
-        // GET: Instructors/Create
-        public ActionResult Create()
-        {
-            ViewBag.ID = new SelectList(db.OfficeAssignments, "InstructorID", "Location");
-            return View();
-        }
-
-        // POST: Instructors/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,LastName,FirstMidName,HireDate")] Instructor instructor)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Instructors.Add(instructor);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.ID = new SelectList(db.OfficeAssignments, "InstructorID", "Location", instructor.ID);
-            return View(instructor);
-        }
+       public ActionResult Create()
+{
+ var instructor = new Instructor();
+ instructor.Courses = new List<Course>();
+ PopulateAssignedCourseData(instructor);
+ return View();
+}
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+       public ActionResult Create([Bind(Include =
+       "LastName,FirstMidName,HireDate,OfficeAssignment")]Instructor instructor,
+       string[] selectedCourses)
+       {
+           if (selectedCourses != null)
+           {
+               instructor.Courses = new List<Course>();
+               foreach (var course in selectedCourses)
+               {
+                   var courseToAdd = db.Courses.Find(int.Parse(course));
+                   instructor.Courses.Add(courseToAdd);
+               }
+           }
+           if (ModelState.IsValid)
+           {
+               db.Instructors.Add(instructor);
+               db.SaveChanges();
+               return RedirectToAction("Index");
+           }
+           PopulateAssignedCourseData(instructor);
+           return View(instructor);
+       }
 
         // GET: Instructors/Edit/5
         public ActionResult Edit(int? id)
